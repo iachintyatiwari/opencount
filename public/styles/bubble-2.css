@@ -1,0 +1,23 @@
+.oc-widget-bubble-2 {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #ffffff;
+  color: #1f2937;
+  border: 1px solid #e5e7eb;
+  padding: 8px 16px;
+  border-radius: 9999px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  transition: box-shadow 0.2s ease;
+}
+.oc-widget-bubble-2:hover {
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+.oc-icon {
+  width: 16px;
+  height: 16px;
+  color: #2563eb;
+}

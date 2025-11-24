@@ -1,26 +1,239 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+/* Tailwind Configuration */
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --font-sans: var(--font-inter), sans-serif;
+    --font-display: var(--font-space-grotesk), sans-serif;
+    --font-handwriting: var(--font-caveat), cursive;
+  }
+
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply bg-dark-950 text-gray-100 antialiased;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Custom Utilities */
+@layer utilities {
+  /* SaaS Grid Background */
+  .bg-grid {
+    background-size: 40px 40px;
+    background-image: 
+      linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  }
+  
+  /* Small Plus Elements for Technical Feel */
+  .plus-pattern {
+    background-image: radial-gradient(circle, currentColor 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+  
+  /* Hacker Text Effect Class */
+  .font-mono-hacker {
+    font-family: 'Courier New', Courier, monospace;
+  }
+
+  /* Typewriter Cursor */
+  .typing-cursor::after {
+    content: '|';
+    animation: blink 1s step-start infinite;
+  }
+
+  @keyframes blink {
+    50% { opacity: 0; }
+  }
+
+  /* Grow X Animation */
+  @keyframes growX {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
+
+  .animate-growX {
+    animation: growX 1s ease-out forwards;
+  }
 }
+
+/* Widget Styles - Bubble 1 */
+.oc-widget-bubble-1 {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2px;
+  background-color: #18181b;
+  color: #ffffff;
+  padding: 12px 20px;
+  border-radius: 12px;
+  border: 1px solid #3f3f46;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  min-width: 90px;
+  position: relative;
+}
+
+.oc-widget-bubble-1:hover {
+  transform: translateY(-1px);
+}
+
+.oc-widget-bubble-1 .oc-icon {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 8px;
+  height: 8px;
+  fill: #f97316;
+  color: #f97316;
+}
+
+/* Widget Styles - Bubble 2 */
+.oc-widget-bubble-2 {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #ffffff;
+  color: #1f2937;
+  border: 1px solid #e5e7eb;
+  padding: 8px 16px;
+  border-radius: 9999px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  transition: box-shadow 0.2s ease;
+}
+
+.oc-widget-bubble-2:hover {
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.oc-widget-bubble-2 .oc-icon {
+  width: 16px;
+  height: 16px;
+  color: #2563eb;
+}
+
+/* Widget Styles - Retro */
+.oc-widget-retro {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #000000;
+  color: #22c55e;
+  padding: 6px 14px;
+  border-radius: 4px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 15px;
+  font-weight: 700;
+  border: 2px solid #333;
+  border-bottom-color: #444;
+  border-right-color: #444;
+  box-shadow: inset 0 0 8px rgba(34, 197, 94, 0.15);
+  letter-spacing: 1px;
+}
+
+.oc-widget-retro:hover {
+  border-color: #444;
+}
+
+.oc-widget-retro .oc-icon {
+  width: 15px;
+  height: 15px;
+  color: #22c55e;
+}
+
+/* Widget Styles - Cyber */
+.oc-widget-cyber {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #09090b;
+  color: #e879f9;
+  padding: 8px 18px;
+  border-radius: 12px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  border: 1px solid #c026d3;
+  box-shadow: 0 0 15px rgba(192, 38, 211, 0.3), inset 0 0 10px rgba(192, 38, 211, 0.1);
+  text-shadow: 0 0 5px rgba(232, 121, 249, 0.5);
+  transition: all 0.3s ease;
+}
+
+.oc-widget-cyber:hover {
+  box-shadow: 0 0 25px rgba(192, 38, 211, 0.5), inset 0 0 15px rgba(192, 38, 211, 0.2);
+  border-color: #e879f9;
+}
+
+.oc-widget-cyber .oc-icon {
+  width: 16px;
+  height: 16px;
+  color: #e879f9;
+  filter: drop-shadow(0 0 2px currentColor);
+}
+
+/* Widget Styles - Glass */
+.oc-widget-glass {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #1e1e2e;
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+.oc-widget-glass .oc-icon {
+  width: 16px;
+  height: 16px;
+  color: #4f46e5;
+}
+
+/* Widget Styles - Minimal */
+.oc-widget-minimal {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: transparent;
+  color: #4b5563;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.oc-widget-minimal .count {
+  font-variant-numeric: tabular-nums;
+}
+
+.oc-widget-minimal .oc-icon {
+  width: 14px;
+  height: 14px;
+  opacity: 0.7;
+}
+
+/* Generic oc-icon styles */
+.oc-icon {
+  width: 16px;
+  height: 16px;
+}
+

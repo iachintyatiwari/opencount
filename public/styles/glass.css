@@ -1,0 +1,21 @@
+.oc-widget-glass {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #1e1e2e;
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+.oc-icon {
+  width: 16px;
+  height: 16px;
+  color: #4f46e5;
+}

@@ -1,0 +1,18 @@
+.oc-widget-minimal {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: transparent;
+  color: #4b5563;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+}
+.oc-widget-minimal .count {
+  font-variant-numeric: tabular-nums;
+}
+.oc-icon {
+  width: 14px;
+  height: 14px;
+  opacity: 0.7;
+}

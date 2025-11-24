@@ -1,0 +1,25 @@
+.oc-widget-retro {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #000000;
+  color: #22c55e;
+  padding: 6px 14px;
+  border-radius: 4px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 15px;
+  font-weight: 700;
+  border: 2px solid #333;
+  border-bottom-color: #444;
+  border-right-color: #444;
+  box-shadow: inset 0 0 8px rgba(34, 197, 94, 0.15);
+  letter-spacing: 1px;
+}
+.oc-widget-retro:hover {
+  border-color: #444;
+}
+.oc-icon {
+  width: 15px;
+  height: 15px;
+  color: #22c55e;
+}
