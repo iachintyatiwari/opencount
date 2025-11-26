@@ -2,14 +2,12 @@ import {prisma} from "../../lib/prisma";
 import {NextRequest} from "next/server"
 
 
-export async function GET(request: NextRequest){
+export async function POST(request: NextRequest){
 
  try{
-   const { searchParams } = new URL(request.url);
-  const domainName = searchParams.get("domainName");
-    // const {domainName} = await request.json();
+     const {Key} = await request.json();
  
-    if(!domainName){
+    if(!Key){
         
         return Response.json("Domain name is required",{status:400});
     }
@@ -18,7 +16,7 @@ export async function GET(request: NextRequest){
     try{
 
         const totalVisitors = await prisma.visit_data.findUnique({
-            where:{domainName:domainName},
+            where:{id:Key},
             select:{totalVisitors:true}
         })
 

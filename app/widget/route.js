@@ -6,10 +6,31 @@ export async function GET() {
     window.__VISITOR_WIDGET_LOADED__ = true;
 
     const scriptEl = document.currentScript;
-    const domainName = scriptEl.getAttribute("data-domain") || window.location.hostname;
+    const Key = scriptEl.getAttribute("data-key") || window.location.hostname;
     const style = scriptEl.getAttribute("data-style") || "bubble-1";
+    const position = scriptEl.getAttribute("data-position") || "top-right";
     const scriptUrl = new URL(scriptEl.src);
     const host = scriptUrl.origin;
+
+    // Helper function to get cookie
+    function getCookie(name) {
+      const cookies = document.cookie ? document.cookie.split('; ') : [];
+      for (let cookie of cookies) {
+        const [cookieName, cookieValue] = cookie.split('=');
+        if (cookieName === name) {
+          return cookieValue;
+        }
+      }
+      return null;
+    }
+
+    // Helper function to set cookie (minutes)
+    function setCookie(name, value, minutes) {
+      const now = new Date();
+      const expirationTime = now.getTime() + (minutes * 60 * 1000);
+      const expirationDate = new Date(expirationTime);
+      document.cookie = name + "=" + value + "; expires=" + expirationDate.toUTCString() + "; path=/";
+    }
 
     // Inject CSS
     const css = document.createElement("link");
@@ -23,6 +44,31 @@ export async function GET() {
     const container = document.createElement("div");
     container.id = "visitor-widget-container";
     container.setAttribute("aria-live", "polite");
+    
+    // Apply dynamic positioning
+    container.style.position = "fixed";
+    container.style.zIndex = "99999";
+    
+    // Parse position (e.g., "bottom-right", "top-left", etc.)
+    const [vertical, horizontal] = position.split('-');
+
+    // Set vertical position
+    if (vertical === 'top') {
+      container.style.top = "20px";
+      container.style.bottom = "auto";
+    } else {
+      container.style.bottom = "20px";
+      container.style.top = "auto";
+    }
+
+    // Set horizontal position
+    if (horizontal === 'left') {
+      container.style.left = "20px";
+      container.style.right = "auto";
+    } else {
+      container.style.right = "20px";
+      container.style.left = "auto";
+    }
 
     // Get icon based on style
     function getIcon(styleId) {
@@ -64,43 +110,61 @@ export async function GET() {
     \`;
     document.body.appendChild(container);
 
-    // Track visit
-    fetch(host + "/api/trackVisit", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        domainName: domainName,
-        url: window.location.href,
-        referrer: document.referrer || null,
-        timestamp: Date.now()
+    // Check if visitor has already been tracked
+    const hasVisited = getCookie('visitor_tracked');
+
+    if (!hasVisited) {
+      // Track visit for new visitors
+      fetch(host + "/api/visit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          Key: Key,
+          url: window.location.href,
+          referrer: document.referrer || null,
+          timestamp: Date.now()
+        })
       })
-    }).catch((err) => {
-      console.warn("[Visitor Widget] Tracking failed:", err);
-    });
+      .then((response) => {
+        if (response.ok) {
+          // Set cookie for 10 minutes after successful tracking (adjust as needed)
+          setCookie('visitor_tracked', 'true', 10);
+        }
+      })
+      .catch((err) => {
+        console.warn("[Visitor Widget] Tracking failed:", err);
+      });
+    }
 
     // Fetch and update stats
     function updateStats() {
-      fetch(host + "/api/getVisitor?domainName=" + encodeURIComponent(domainName))
-        .then((r) => {
-          if (!r.ok) throw new Error("HTTP " + r.status);
-          return r.json();
-        })
-        .then((res) => {
-          const el = container.querySelector(".count");
-          if (el) el.textContent = formatCount(res.totalVisitors ?? 0, style);
-        })
-        .catch((err) => {
-          console.warn("[Visitor Widget] Stats fetch failed:", err);
-          const el = container.querySelector(".count");
-          if (el) el.textContent = "—";
-        });
+      fetch(host + "/api/getVisitor", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ Key: Key })
+      })
+      .then((r) => {
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        return r.json();
+      })
+      .then((res) => {
+        const el = container.querySelector(".count");
+        if (el) el.textContent = formatCount(res.totalVisitors ?? 0, style);
+      })
+      .catch((err) => {
+        console.warn("[Visitor Widget] Stats fetch failed:", err);
+        const el = container.querySelector(".count");
+        if (el) el.textContent = "—";
+      });
     }
 
+    // Initial load
     updateStats();
 
-    const refresh = scriptEl.getAttribute("data-refresh");
+    // Optional auto-refresh
+    const refresh = scriptEl.getAttribute("data-refresh-time");
     if (refresh !== "false") {
-      const interval = parseInt(refresh) || 30000;
+      const interval = parseInt(refresh) || 300000; // Default to 5 minutes
       setInterval(updateStats, interval);
     }
   } catch (err) {

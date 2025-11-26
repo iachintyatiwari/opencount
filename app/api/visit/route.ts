@@ -5,9 +5,9 @@ export async function POST(request: Request){
 
   try{
 
-   const {domainName} = await request.json();
+   const {Key} = await request.json();
     
-   if(!domainName){ 
+   if(!Key){ 
     
       return new Response("Domain name is required", {status:400});
    }
@@ -17,7 +17,7 @@ export async function POST(request: Request){
 
        await prisma.visit_data.update({
         
-          where:{domainName:domainName},
+          where:{id:Key},
           data:{totalVisitors:{increment:1}
 
        }});
